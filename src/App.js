@@ -91,7 +91,8 @@ export default function App() {
     //         String(dataEle.groupId).includes(selectedGroupId)
     //     )
     //   : [];
-    const isNested = groupIds.length > 1;
+    // const isNested = groupIds.length > 1;
+    const isNested = true;
     const groupContent = Array.isArray(tableDataRef.current.tableData)
       ? tableDataRef.current.tableData.filter((dataEle) =>
           dataEle.isGroupNode && isNested

@@ -40,7 +40,7 @@
     "groupId": "group-001"
   },
   {
-    "id": 4,
+    "id": 5,
     "player_name": "Player 2.3",
     "organization": "Org2.1",
     "game_score": 28,
@@ -50,7 +50,7 @@
     "groupId": "group-001,group-002"
   },
   {
-    "id": 4,
+    "id": 6,
     "player_name": "Player 2.3.1",
     "organization": "Org2.1",
     "game_score": 28,
@@ -60,7 +60,7 @@
     "groupId": "group-002"
   },
   {
-    "id": 4,
+    "id": 7,
     "player_name": "Player 2.3.2",
     "organization": "Org2.1.1",
     "game_score": 28,
@@ -70,12 +70,12 @@
     "groupId": "group-002,group-003"
   },
   {
-    "id": 4,
+    "id": 8,
     "player_name": "Player 2.3.2.1",
     "organization": "Org2.1.1",
     "game_score": 28,
     "type": "single",
-    "isGroupRoot": true,
+    "isGroupRoot": false,
     "isGroupNode": true,
     "groupId": "group-002,group-003"
   }
