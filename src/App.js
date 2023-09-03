@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './style.css';
 
 export default function App() {
   const [groupOpenStatus, setGroupOpenStatus] = useState([]);
@@ -84,13 +85,6 @@ export default function App() {
   const getGroupContent = (groupId) => {
     const groupIds = groupId ? String(groupId).split(',') : [];
     const selectedGroupId = groupIds[groupIds.length - 1] ?? null;
-    // const groupContent = Array.isArray(tableDataRef.current.tableData)
-    //   ? tableDataRef.current.tableData.filter(
-    //       (dataEle) =>
-    //         dataEle.isGroupNode &&
-    //         String(dataEle.groupId).includes(selectedGroupId)
-    //     )
-    //   : [];
     // const isNested = groupIds.length > 1;
     const isNested = false;
     const groupContent = Array.isArray(tableDataRef.current.tableData)
@@ -102,12 +96,15 @@ export default function App() {
               : String(dataEle.groupId).includes(selectedGroupId))
         )
       : [];
-    console.log(`Filtered Group Content ===> `, groupContent);
     return (
       groupContent.length &&
       groupContent.map((contentRow, contentRowIndex) => (
         <React.Fragment key={`${groupId}-row-${contentRowIndex}`}>
-          <tr>
+          <tr
+            className={`table-row ${
+              contentRow.isGroupRoot ? 'group-root' : 'group-node'
+            }`}
+          >
             <td>
               {contentRow.isGroupRoot ? (
                 <span onClick={(e) => openGroupContent(contentRow.groupId)}>
@@ -150,7 +147,11 @@ export default function App() {
           <tbody>
             {tableDataRef.current.groupedData.map((row, rowIndex) => (
               <React.Fragment key={`row-${rowIndex}`}>
-                <tr>
+                <tr
+                  className={`table-row ${
+                    row.isGroupRoot ? 'group-root' : 'group-node'
+                  }`}
+                >
                   <td>
                     {row.isGroupRoot ? (
                       <span onClick={(e) => openGroupContent(row.groupId)}>

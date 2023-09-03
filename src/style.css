@@ -3,3 +3,17 @@ p {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+.tbale-responsive .table tr.table-row {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.table tr.table-row.group-root > td {
+  background-color: grey;
+  color: orange;
+  font-weight: bold;
+}
+
+.group-root > td > span {
+  cursor: pointer;
+}
