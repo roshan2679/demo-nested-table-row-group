@@ -13,12 +13,12 @@ export default function App() {
       header: 'Organization',
     },
     {
-      node: 'name',
-      header: 'Name',
+      node: 'player_name',
+      header: 'Player Name',
     },
     {
-      node: 'age',
-      header: 'Age',
+      node: 'game_score',
+      header: 'Game Score',
     },
   ];
 
