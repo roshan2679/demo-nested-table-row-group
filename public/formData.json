@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "player_name": "Player 1",
+    "organization": "Org1",
+    "game_score": 28,
+    "type": "single",
+    "isGroupRoot": false,
+    "isGroupNode": false,
+    "groupId": null
+  },
+  {
+    "id": 2,
+    "player_name": "Player 2",
+    "organization": "Org2",
+    "game_score": 27,
+    "type": "single",
+    "isGroupRoot": true,
+    "isGroupNode": false,
+    "groupId": "group-001"
+  },
+  {
+    "id": 3,
+    "player_name": "Player 2.1",
+    "organization": "Org2",
+    "game_score": 26,
+    "type": "single",
+    "isGroupRoot": false,
+    "isGroupNode": true,
+    "groupId": "group-001"
+  },
+  {
+    "id": 4,
+    "player_name": "Player 2.2",
+    "organization": "Org2",
+    "game_score": 28,
+    "type": "single",
+    "isGroupRoot": false,
+    "isGroupNode": true,
+    "groupId": "group-001"
+  },
+  {
+    "id": 4,
+    "player_name": "Player 2.3",
+    "organization": "Org2.1",
+    "game_score": 28,
+    "type": "single",
+    "isGroupRoot": true,
+    "isGroupNode": true,
+    "groupId": "group-001,group-002"
+  },
+  {
+    "id": 4,
+    "player_name": "Player 2.3.1",
+    "organization": "Org2.1",
+    "game_score": 28,
+    "type": "single",
+    "isGroupRoot": false,
+    "isGroupNode": true,
+    "groupId": "group-002"
+  },
+  {
+    "id": 4,
+    "player_name": "Player 2.3.2",
+    "organization": "Org2.1.1",
+    "game_score": 28,
+    "type": "single",
+    "isGroupRoot": true,
+    "isGroupNode": true,
+    "groupId": "group-002,group-003"
+  },
+  {
+    "id": 4,
+    "player_name": "Player 2.3.2.1",
+    "organization": "Org2.1.1",
+    "game_score": 28,
+    "type": "single",
+    "isGroupRoot": true,
+    "isGroupNode": true,
+    "groupId": "group-002,group-003"
+  }
+]
