@@ -92,12 +92,14 @@ export default function App() {
     //     )
     //   : [];
     // const isNested = groupIds.length > 1;
-    const isNested = true;
+    const isNested = false;
     const groupContent = Array.isArray(tableDataRef.current.tableData)
-      ? tableDataRef.current.tableData.filter((dataEle) =>
-          dataEle.isGroupNode && isNested
-            ? String(dataEle.groupId) === selectedGroupId
-            : String(dataEle.groupId).includes(selectedGroupId)
+      ? tableDataRef.current.tableData.filter(
+          (dataEle) =>
+            dataEle.isGroupNode &&
+            (isNested
+              ? String(dataEle.groupId) === selectedGroupId
+              : String(dataEle.groupId).includes(selectedGroupId))
         )
       : [];
     console.log(`Filtered Group Content ===> `, groupContent);
