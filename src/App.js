@@ -124,7 +124,7 @@ export default function App() {
   return (
     <div>
       <div className="table-responsive">
-        <table className="table table-dark table-bordered">
+        <table className="table table-dark">
           <thead>
             <tr>
               <th scope="col"></th>

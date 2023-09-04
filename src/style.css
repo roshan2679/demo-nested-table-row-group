@@ -13,9 +13,25 @@ p {
   font-weight: bold;
 }
 
-.table tr.table-row.group-root > td {
+.table {
+  background-color: black;
+}
+
+.table tr.table-row.group-root td {
   color: orange;
   font-weight: bold;
+  background: dimgray;
+  /* box-shadow: inset 2px 2px 5px 0px #4c4c4c; */
+}
+
+tr.table-row.group-root td:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+tr.table-row.group-root td:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .group-root > td > span {
