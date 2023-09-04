@@ -80,17 +80,15 @@ export default function App() {
   console.log(`GroupNodes ==> `, groupNodes);
 
   const isGroupOpened = (groupId) => {
-    const groupIds = groupId ? String(groupId).split(',') : [];
-    const selectedGroupId = groupIds[groupIds.length - 1] ?? null;
+    const selectedGroupId = getLastIdAfterComma(groupId);
     return groupOpenStatus[selectedGroupId] || false;
   };
 
   const toggleGroupContent = (groupId) => {
-    const groupIds = groupId ? String(groupId).split(',') : [];
-    const selectedGroupId = groupIds[groupIds.length - 1] ?? null;
+    const selectedGroupId = getLastIdAfterComma(groupId);
     setGroupOpenStatus((prevStatus) => ({
       ...prevStatus,
-      [selectedGroupId]: !prevStatus[groupId],
+      [selectedGroupId]: !prevStatus[selectedGroupId],
     }));
   };
 

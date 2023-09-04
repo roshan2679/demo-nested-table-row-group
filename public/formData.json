@@ -78,5 +78,15 @@
     "isGroupRoot": false,
     "isGroupNode": true,
     "groupId": "group-003"
+  },
+  {
+    "id": 9,
+    "player_name": "Player 3",
+    "organization": "Org3",
+    "game_score": 28,
+    "type": "single",
+    "isGroupRoot": false,
+    "isGroupNode": false,
+    "groupId": null
   }
 ]
