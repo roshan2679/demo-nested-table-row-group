@@ -8,8 +8,12 @@ p {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+.action-icon {
+  color: inherit;
+  font-weight: bold;
+}
+
 .table tr.table-row.group-root > td {
-  background-color: grey;
   color: orange;
   font-weight: bold;
 }

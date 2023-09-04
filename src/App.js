@@ -2,11 +2,13 @@ import React, { useEffect, useState, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 
-let iterationCount = 0;
-
 export default function App() {
   const [groupOpenStatus, setGroupOpenStatus] = useState(null);
   const [groupNodes, setGroupNodes] = useState(null);
+
+  console.log(`GroupOpened Status ==> `, groupOpenStatus);
+  console.log(`GroupNodes ==> `, groupNodes);
+
   const tableDataRef = useRef({
     tableData: [],
     groupedData: [],
@@ -76,9 +78,6 @@ export default function App() {
       });
   }, []);
 
-  console.log(`GroupOpened Status ==> `, groupOpenStatus);
-  console.log(`GroupNodes ==> `, groupNodes);
-
   const isGroupOpened = (groupId) => {
     const selectedGroupId = getLastIdAfterComma(groupId);
     return groupOpenStatus[selectedGroupId] || false;
@@ -103,8 +102,11 @@ export default function App() {
         >
           <td>
             {contentRow.isGroupRoot ? (
-              <span onClick={(e) => toggleGroupContent(contentRow.groupId)}>
-                {isGroupOpened(contentRow.groupId) ? <>👆</> : <>👇</>}
+              <span
+                className={`action-icon`}
+                onClick={(e) => toggleGroupContent(contentRow.groupId)}
+              >
+                {isGroupOpened(contentRow.groupId) ? <>▲</> : <>▼</>}
               </span>
             ) : null}
           </td>
@@ -122,7 +124,7 @@ export default function App() {
   return (
     <div>
       <div className="table-responsive">
-        <table className="table table-dark table-striped">
+        <table className="table table-dark table-bordered">
           <thead>
             <tr>
               <th scope="col"></th>
@@ -141,8 +143,11 @@ export default function App() {
                 >
                   <td>
                     {row.isGroupRoot ? (
-                      <span onClick={(e) => toggleGroupContent(row.groupId)}>
-                        {isGroupOpened(row.groupId) ? <>👆</> : <>👇</>}
+                      <span
+                        className={`action-icon`}
+                        onClick={(e) => toggleGroupContent(row.groupId)}
+                      >
+                        {isGroupOpened(row.groupId) ? <>▲</> : <>▼</>}
                       </span>
                     ) : null}
                   </td>
