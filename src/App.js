@@ -2,8 +2,11 @@ import React, { useEffect, useState, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css';
 
+let iterationCount = 0;
+
 export default function App() {
-  const [groupOpenStatus, setGroupOpenStatus] = useState([]);
+  const [groupOpenStatus, setGroupOpenStatus] = useState(null);
+  const [groupNodes, setGroupNodes] = useState(null);
   const tableDataRef = useRef({
     tableData: [],
     groupedData: [],
@@ -23,6 +26,41 @@ export default function App() {
     },
   ];
 
+  const getLastIdAfterComma = (groupId) => {
+    const ids = String(groupId)
+      .split(',')
+      .map((ele) => ele.trim());
+    return ids[ids.length - 1];
+  };
+
+  const formatTableData = (tableData) => {
+    const openStatus = {};
+    const groupNodes = {};
+    tableData.forEach((data) => {
+      if (data.groupId) {
+        const groupIds = String(data.groupId).split(',');
+        groupIds.forEach((id) => {
+          openStatus[id] = false;
+          groupNodes[id] = tableData.filter((filterEle) => {
+            if (filterEle.groupId && filterEle.groupId.includes(id)) {
+              if (
+                (filterEle.groupId.includes(',') &&
+                  id !== getLastIdAfterComma(filterEle.groupId)) ||
+                (!filterEle.groupId.includes(',') &&
+                  id === getLastIdAfterComma(filterEle.groupId))
+              ) {
+                return true;
+              }
+            }
+            return false;
+          });
+        });
+      }
+    });
+    setGroupOpenStatus(openStatus);
+    setGroupNodes(groupNodes);
+  };
+
   useEffect(() => {
     fetch('/formData.json')
       .then((res) => res.json())
@@ -30,107 +68,108 @@ export default function App() {
         console.log(`Data ==> `, data);
         const groupedData =
           Array.isArray(data) && data.filter((ele) => !ele.isGroupNode);
-
-        const openStatus =
-          Array.isArray(data) &&
-          data.reduce((acc, current) => {
-            if (current.groupId) {
-              const groupIds = String(current.groupId).split(',');
-              groupIds.forEach((id) => {
-                if (!acc.find((ele) => ele.groupId === id)) {
-                  acc.push({
-                    groupId: id,
-                    isOpened: false,
-                  });
-                }
-              });
-            }
-            return acc;
-          }, []);
-        setGroupOpenStatus(() => {
-          return [...openStatus];
-        });
+        formatTableData(data);
         tableDataRef.current.tableData = data;
         tableDataRef.current.groupedData = groupedData;
       });
   }, []);
 
   console.log(`GroupOpened Status ==> `, groupOpenStatus);
+  console.log(`GroupNodes ==> `, groupNodes);
 
   const isGroupOpened = (groupId) => {
     const groupIds = groupId ? String(groupId).split(',') : [];
     const selectedGroupId = groupIds[groupIds.length - 1] ?? null;
-    return (
-      groupOpenStatus.find((ele) => ele.groupId === selectedGroupId)
-        ?.isOpened ?? false
-    );
+    return groupOpenStatus[selectedGroupId] || false;
   };
 
-  const openGroupContent = (groupId) => {
+  const toggleGroupContent = (groupId) => {
     const groupIds = groupId ? String(groupId).split(',') : [];
     const selectedGroupId = groupIds[groupIds.length - 1] ?? null;
-    setGroupOpenStatus((current) =>
-      current.map((groupEle) => {
-        return {
-          ...groupEle,
-          isOpened:
-            groupEle.groupId === selectedGroupId
-              ? !groupEle.isOpened
-              : groupEle.isOpened,
-        };
-      })
-    );
+    setGroupOpenStatus((prevStatus) => ({
+      ...prevStatus,
+      [selectedGroupId]: !prevStatus[groupId],
+    }));
   };
 
   const getGroupContent = (groupId) => {
-    const groupIds = groupId ? String(groupId).split(',') : [];
-    const selectedGroupId = groupIds[groupIds.length - 1] ?? null;
-    // const isNested = groupIds.length > 1;
-    const isNested = false;
-    const groupContent = Array.isArray(tableDataRef.current.tableData)
-      ? tableDataRef.current.tableData.filter(
-          (dataEle) =>
-            dataEle.isGroupNode &&
-            (isNested
-              ? String(dataEle.groupId) === selectedGroupId
-              : String(dataEle.groupId).includes(selectedGroupId))
-        )
-      : [];
-    return (
-      groupContent.length &&
-      groupContent.map((contentRow, contentRowIndex) => (
-        <React.Fragment key={`${groupId}-row-${contentRowIndex}`}>
-          <tr
-            className={`table-row ${
-              contentRow.isGroupRoot ? 'group-root' : 'group-node'
-            }`}
-          >
-            <td>
-              {contentRow.isGroupRoot ? (
-                <span onClick={(e) => openGroupContent(contentRow.groupId)}>
-                  {isGroupOpened(contentRow.groupId) ? <>👆</> : <>👇</>}
-                </span>
-              ) : null}
-            </td>
-            {tableColumns.map((column, colIndex) => (
-              <td key={`${groupId}-col-${colIndex}`}>
-                {contentRow[column.node]}
-              </td>
-            ))}
-          </tr>
-          {contentRow.groupId !== selectedGroupId &&
-          isGroupOpened(contentRow.groupId)
-            ? getGroupContent(contentRow.groupId)
-            : null}
-          {/* <tr>
-            <td colSpan="4">
-              {contentRow.groupId}
-            </td>
-          </tr> */}
-        </React.Fragment>
-      ))
-    );
+    const id = getLastIdAfterComma(groupId);
+    return groupNodes[id].map((contentRow, contentRowIndex) => (
+      <React.Fragment key={`${id}-row-${contentRowIndex}`}>
+        <tr
+          className={`table-row ${
+            contentRow.isGroupRoot ? 'group-root' : 'group-node'
+          }`}
+        >
+          <td>
+            {contentRow.isGroupRoot ? (
+              <span onClick={(e) => toggleGroupContent(contentRow.groupId)}>
+                {isGroupOpened(contentRow.groupId) ? <>👆</> : <>👇</>}
+              </span>
+            ) : null}
+          </td>
+          {tableColumns.map((column, colIndex) => (
+            <td key={`col-${colIndex}`}>{contentRow[column.node]}</td>
+          ))}
+        </tr>
+        {isGroupOpened(contentRow.groupId)
+          ? getGroupContent(contentRow.groupId)
+          : null}
+      </React.Fragment>
+    ));
   };
+
+  // const getGroupContent = (groupId) => {
+  //   iterationCount += 1;
+  //   const groupIds = groupId ? String(groupId).split(',') : [];
+  //   const selectedGroupId = groupIds[groupIds.length - 1] ?? null;
+  //   // const isNested = groupIds.length > 1;
+  //   const isNested = false;
+  //   const groupContent = Array.isArray(tableDataRef.current.tableData)
+  //     ? tableDataRef.current.tableData.filter(
+  //         (dataEle) =>
+  //           dataEle.isGroupNode &&
+  //           (isNested
+  //             ? String(dataEle.groupId) === selectedGroupId
+  //             : String(dataEle.groupId).includes(selectedGroupId))
+  //       )
+  //     : [];
+  //   return (
+  //     iterationCount < 20 &&
+  //     groupContent.length &&
+  //     groupContent.map((contentRow, contentRowIndex) => (
+  //       <React.Fragment key={`${groupId}-row-${contentRowIndex}`}>
+  //         <tr
+  //           className={`table-row ${
+  //             contentRow.isGroupRoot ? 'group-root' : 'group-node'
+  //           }`}
+  //         >
+  //           <td>
+  //             {contentRow.isGroupRoot ? (
+  //               <span onClick={(e) => toggleGroupContent(contentRow.groupId)}>
+  //                 {isGroupOpened(contentRow.groupId) ? <>👆</> : <>👇</>}
+  //               </span>
+  //             ) : null}
+  //           </td>
+  //           {tableColumns.map((column, colIndex) => (
+  //             <td key={`${groupId}-col-${colIndex}`}>
+  //               {contentRow[column.node]}
+  //             </td>
+  //           ))}
+  //         </tr>
+  //         {contentRow.groupId !== selectedGroupId &&
+  //         isGroupOpened(contentRow.groupId)
+  //           ? getGroupContent(contentRow.groupId)
+  //           : null}
+  //         {/* <tr>
+  //           <td colSpan="4">
+  //             {contentRow.groupId}
+  //           </td>
+  //         </tr> */}
+  //       </React.Fragment>
+  //     ))
+  //   );
+  // };
 
   return (
     <div>
@@ -154,7 +193,7 @@ export default function App() {
                 >
                   <td>
                     {row.isGroupRoot ? (
-                      <span onClick={(e) => openGroupContent(row.groupId)}>
+                      <span onClick={(e) => toggleGroupContent(row.groupId)}>
                         {isGroupOpened(row.groupId) ? <>👆</> : <>👇</>}
                       </span>
                     ) : null}
