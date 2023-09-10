@@ -106,7 +106,7 @@ export default function App() {
                 className={`action-icon`}
                 onClick={(e) => toggleGroupContent(contentRow.groupId)}
               >
-                {isGroupOpened(contentRow.groupId) ? <>▲</> : <>▼</>}
+                {isGroupOpened(contentRow.groupId) ? <>▼</> : <>▶</>}
               </span>
             ) : null}
           </td>
@@ -147,7 +147,7 @@ export default function App() {
                         className={`action-icon`}
                         onClick={(e) => toggleGroupContent(row.groupId)}
                       >
-                        {isGroupOpened(row.groupId) ? <>▲</> : <>▼</>}
+                        {isGroupOpened(row.groupId) ? <>▼</> : <>▶</>}
                       </span>
                     ) : null}
                   </td>
